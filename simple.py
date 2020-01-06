@@ -13,6 +13,8 @@ class Rectangle:
         graph.TKCanvas.itemconfig(self.rect_id, fill=color)
         window.Refresh()
 
+    def __gt__(self, other):
+        return self.height > other.height
 
 class Sorter:
 
@@ -67,8 +69,8 @@ class Sorter:
         self.array_access += 1
         self.window.FindElement('text').Update(f'Array access: {self.array_access}')
 
-        rect1.highlight('Green')
-        rect2.highlight('Green')
+        # rect1.highlight('Green')
+        # rect2.highlight('Green')
         time.sleep(1 / self.timeout)
 
         rect1_upper_left_x = self.graph.GetBoundingBox(rect1.rect_id)[0][0]
@@ -83,8 +85,8 @@ class Sorter:
         self.window.Refresh()
         time.sleep(1 / self.timeout)
 
-        rect1.highlight('Black')
-        rect2.highlight('Black')
+        # rect1.highlight('Black')
+        # rect2.highlight('Black')
 
     def bubble(self):
         for i in range(len(self.array) - 1):
@@ -141,8 +143,8 @@ class Sorter:
 
             while i < len(lefthalf) and j < len(righthalf):
                 if lefthalf[i].height <= righthalf[j].height:
-                    self.array[k].highlight('Green')
-                    lefthalf[i].highlight('Green')
+                    # self.array[k].highlight('Green')
+                    # lefthalf[i].highlight('Green')
                     time.sleep(1 / self.timeout)
 
                     self.array[k] = lefthalf[i]
@@ -151,8 +153,8 @@ class Sorter:
 
                     self.redraw()
                 else:
-                    self.array[k].highlight('Green')
-                    righthalf[j].highlight('Green')
+                    # self.array[k].highlight('Green')
+                    # righthalf[j].highlight('Green')
                     time.sleep(1 / self.timeout)
 
                     self.array[k] = righthalf[j]
@@ -164,8 +166,8 @@ class Sorter:
                 k_or += 1
 
             while i < len(lefthalf):
-                self.array[k].highlight('Green')
-                lefthalf[i].highlight('Green')
+                # self.array[k].highlight('Green')
+                # lefthalf[i].highlight('Green')
                 time.sleep(1 / self.timeout)
 
                 self.array[k] = lefthalf[i]
@@ -177,8 +179,8 @@ class Sorter:
                 self.redraw()
 
             while j < len(righthalf):
-                self.array[k].highlight('Green')
-                righthalf[j].highlight('Green')
+                # self.array[k].highlight('Green')
+                # righthalf[j].highlight('Green')
                 time.sleep(1 / self.timeout)
 
                 self.array[k] = righthalf[j]
@@ -198,6 +200,38 @@ class Sorter:
                 self.array[i - 1], self.array[i] = self.array[i], self.array[i - 1]
                 if i > 1: i -= 1
 
+    def countingSort(self, exp1): 
+        n = len(self.array) 
+        output = [0] * (n) 
+        count = [0] * (10) 
+      
+        for i in range(0, n): 
+            index = int(self.array[i].height/exp1) 
+            count[ (index)%10 ] += 1
+      
+        for i in range(1,10): 
+            count[i] += count[i-1] 
+      
+        i = n-1
+        while i >= 0: 
+            index = int(self.array[i].height/exp1) 
+            output[ count[ (index)%10 ] - 1] = self.array[i]
+            count[ (index)%10 ] -= 1
+            i -= 1
+
+        i = 0
+        for i in range(0,len(self.array)):
+            self.array[i] = output[i]
+            self.redraw()
+
+    def radix(self): 
+        max1 = max(self.array).height 
+        exp = 1
+        while self.array != sorted(self.array): 
+            self.countingSort(exp) 
+            exp *= 10
+  
+
 
 WIDTH = 850
 HEIGHT = 400
@@ -212,9 +246,10 @@ layout = [
            sg.Button('Merge'),
            sg.Button('Quicksort'),
            sg.Button('Bubble'),
-           sg.Button('Gnome')],
+           sg.Button('Gnome'),
+           sg.Button('Radix')],
 
-           [sg.Slider(range=(10, 400), orientation='horizontal', key='slider',
+           [sg.Slider(range=(10, 200), orientation='horizontal', key='slider',
                       change_submits=True, disable_number_display=True),
             sg.Text('Array access: 0       ', key='text')],
            
@@ -272,5 +307,10 @@ while True:
 
         if event == 'Gnome':
             sorter.gnome()
+            sorter.color_all_green()
+            started = False
+
+        if event == 'Radix':
+            sorter.radix()
             sorter.color_all_green()
             started = False
