@@ -10,7 +10,8 @@ class Rectangle:
         self.height = height
 
     def highlight(self, graph, color1, color2=None):
-        if color2 is None: color2 = color1
+        if color2 is None:
+            color2 = color1
         graph.TKCanvas.itemconfig(self.rect_id, fill=color1, outline=color2)
         window.Refresh()
 
@@ -36,7 +37,7 @@ class Sorter:
         self.bar_width = 0
         self.startx = 0
 
-        self.array = None
+        self.array_of_rects = None
         self.values = None
         self.array_access = 0
 
@@ -44,7 +45,7 @@ class Sorter:
         x1 = self.startx
         x2 = x1 + self.bar_width
         k = 0
-        self.array = []
+        self.array_of_rects = []
         self.values = []
         for _ in range(slider_value):
             number = random.randint(1, self.graph.Size[1])
@@ -54,7 +55,7 @@ class Sorter:
                 (x2, 0.0),
                 fill_color=Sorter.BLUE,
                 line_color=Sorter.BLUE_OUTLINE)
-            self.array.append(Rectangle(rectangle_id, number))
+            self.array_of_rects.append(Rectangle(rectangle_id, number))
             x1 = x2 + 1
             x2 = x1 + self.bar_width
 
@@ -64,7 +65,7 @@ class Sorter:
             f'Array access: {self.array_access}')
         self.graph.Erase()
 
-        for i, elem in enumerate(self.array):
+        for i, elem in enumerate(self.array_of_rects):
             x1 = self.startx + (i) * (self.bar_width + 1)
             if elem.height == self.values[i]:
                 elem.rect_id = self.graph.DrawRectangle(
@@ -84,10 +85,10 @@ class Sorter:
         time.sleep(1 / self.timeout)
 
     def color_all_green(self):
-        for elem in self.array:
+        for elem in self.array_of_rects:
             elem.highlight(self.graph, Sorter.BLUE, Sorter.BLUE_OUTLINE)
 
-        for elem in self.array:
+        for elem in self.array_of_rects:
             elem.highlight(self.graph, Sorter.GREEN, Sorter.GREEN_OUTLINE)
             time.sleep(1 / self.timeout)
 
@@ -116,34 +117,36 @@ class Sorter:
         rect2.highlight(self.graph, Sorter.BLUE, Sorter.BLUE_OUTLINE)
 
     def bubble(self):
-        for i in range(len(self.array) - 1):
-            for j in range(len(self.array) - i - 1):
-                if self.array[j].height > self.array[j + 1].height:
-                    self.swap_rects(self.array[j], self.array[j + 1])
-                    self.array[j], self.array[j +
-                                              1] = self.array[j + 1], self.array[j]
+        for i in range(len(self.array_of_rects) - 1):
+            for j in range(len(self.array_of_rects) - i - 1):
+                if self.array_of_rects[j].height > self.array_of_rects[j + 1].height:
+                    self.swap_rects(
+                        self.array_of_rects[j], self.array_of_rects[j + 1])
+                    self.array_of_rects[j], self.array_of_rects[j +
+                                                                1] = self.array_of_rects[j + 1], self.array_of_rects[j]
             self.window.Refresh()
 
     def partition(self, start, end):
-        pivot = self.array[start].height
+        pivot = self.array_of_rects[start].height
         low = start + 1
         high = end
 
         while True:
-            while low <= high and self.array[high].height >= pivot:
+            while low <= high and self.array_of_rects[high].height >= pivot:
                 high = high - 1
 
-            while low <= high and self.array[low].height <= pivot:
+            while low <= high and self.array_of_rects[low].height <= pivot:
                 low = low + 1
 
             if low <= high:
-                self.swap_rects(self.array[low], self.array[high])
-                self.array[low], self.array[high] = self.array[high], self.array[low]
+                self.swap_rects(
+                    self.array_of_rects[low], self.array_of_rects[high])
+                self.array_of_rects[low], self.array_of_rects[high] = self.array_of_rects[high], self.array_of_rects[low]
             else:
                 break
 
-        self.swap_rects(self.array[start], self.array[high])
-        self.array[start], self.array[high] = self.array[high], self.array[start]
+        self.swap_rects(self.array_of_rects[start], self.array_of_rects[high])
+        self.array_of_rects[start], self.array_of_rects[high] = self.array_of_rects[high], self.array_of_rects[start]
 
         return high
 
@@ -155,14 +158,14 @@ class Sorter:
         self.quick_sort(start, p - 1)
         self.quick_sort(p + 1, end)
 
-    def mergeSort(self, arr, startindex):
+    def merge_sort(self, arr, startindex):
         if len(arr) > 1:
             mid = len(arr) // 2
             lefthalf = arr[:mid]
             righthalf = arr[mid:]
 
-            self.mergeSort(lefthalf, int(startindex))
-            self.mergeSort(righthalf, int(startindex + len(arr) / 2))
+            self.merge_sort(lefthalf, int(startindex))
+            self.merge_sort(righthalf, int(startindex + len(arr) / 2))
 
             i = 0
             j = 0
@@ -171,13 +174,13 @@ class Sorter:
 
             while i < len(lefthalf) and j < len(righthalf):
                 if lefthalf[i].height <= righthalf[j].height:
-                    self.array[k] = lefthalf[i]
+                    self.array_of_rects[k] = lefthalf[i]
                     arr[k_or] = lefthalf[i]
                     i += 1
 
                     self.redraw()
                 else:
-                    self.array[k] = righthalf[j]
+                    self.array_of_rects[k] = righthalf[j]
                     arr[k_or] = righthalf[j]
                     j += 1
 
@@ -186,7 +189,7 @@ class Sorter:
                 k_or += 1
 
             while i < len(lefthalf):
-                self.array[k] = lefthalf[i]
+                self.array_of_rects[k] = lefthalf[i]
                 arr[k_or] = lefthalf[i]
                 i += 1
                 k += 1
@@ -195,7 +198,7 @@ class Sorter:
                 self.redraw()
 
             while j < len(righthalf):
-                self.array[k] = righthalf[j]
+                self.array_of_rects[k] = righthalf[j]
                 arr[k_or] = righthalf[j]
                 j += 1
                 k += 1
@@ -204,23 +207,25 @@ class Sorter:
                 self.redraw()
 
     def gnome(self):
-        i, size = 1, len(self.array)
+        i, size = 1, len(self.array_of_rects)
         while i < size:
-            if self.array[i - 1].height <= self.array[i].height:
+            if self.array_of_rects[i - 1].height <= self.array_of_rects[i].height:
                 i += 1
             else:
-                self.swap_rects(self.array[i - 1], self.array[i])
-                self.array[i - 1], self.array[i] = self.array[i], self.array[i - 1]
+                self.swap_rects(
+                    self.array_of_rects[i - 1], self.array_of_rects[i])
+                self.array_of_rects[i -
+                                    1], self.array_of_rects[i] = self.array_of_rects[i], self.array_of_rects[i - 1]
                 if i > 1:
                     i -= 1
 
-    def countingSort(self, exp1):
-        n = len(self.array)
+    def counting_sort(self, exp1):
+        n = len(self.array_of_rects)
         output = [0] * (n)
         count = [0] * (10)
 
         for i in range(0, n):
-            index = int(self.array[i].height / exp1)
+            index = int(self.array_of_rects[i].height / exp1)
             count[(index) % 10] += 1
 
         for i in range(1, 10):
@@ -228,21 +233,21 @@ class Sorter:
 
         i = n - 1
         while i >= 0:
-            index = int(self.array[i].height / exp1)
-            output[count[(index) % 10] - 1] = self.array[i]
+            index = int(self.array_of_rects[i].height / exp1)
+            output[count[(index) % 10] - 1] = self.array_of_rects[i]
             count[(index) % 10] -= 1
             i -= 1
 
         i = 0
-        for i in range(0, len(self.array)):
-            self.array[i] = output[i]
+        for i in range(0, len(self.array_of_rects)):
+            self.array_of_rects[i] = output[i]
             self.redraw()
 
     def radix(self):
-        max1 = max(self.array).height
+        max1 = max(self.array_of_rects).height
         exp = 1
-        while self.array != sorted(self.array):
-            self.countingSort(exp)
+        while self.array_of_rects != sorted(self.array_of_rects):
+            self.counting_sort(exp)
             exp *= 10
 
 
@@ -264,7 +269,7 @@ layout = [
 
     [sg.Slider(range=(10, 200), orientation='horizontal', key='slider',
                change_submits=True, disable_number_display=True),
-     sg.Text('Array access: 0       ', key='text')],
+     sg.Text('Array access: 0    ', key='text')],
 
     [graph],
 ]
@@ -304,7 +309,7 @@ while True:
 
     if started:
         if event == 'Merge':
-            sorter.mergeSort(sorter.array, 0)
+            sorter.merge_sort(sorter.array_of_rects, 0)
             sorter.color_all_green()
             started = False
 
@@ -314,7 +319,7 @@ while True:
             started = False
 
         if event == 'Quicksort':
-            sorter.quick_sort(0, len(sorter.array) - 1)
+            sorter.quick_sort(0, len(sorter.array_of_rects) - 1)
             sorter.color_all_green()
             started = False
 
