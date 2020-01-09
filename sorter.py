@@ -1,0 +1,128 @@
+import random
+import time
+import PySimpleGUI as sg
+
+class Rectangle:
+
+    def __init__(self, rect_id: int, height: int):
+        self.rect_id = rect_id
+        self.height = height
+
+    def highlight(self, graph: sg.Graph, color1: str, color2: str=None):
+        if color2 is None:
+            color2 = color1
+        graph.TKCanvas.itemconfig(self.rect_id, fill=color1, outline=color2)
+
+    def __gt__(self, other):
+        return self.height > other.height
+
+
+class Sorter:
+
+    BLUE = '#64778d'
+    BLUE_OUTLINE = '#5c6d81'
+    MAGENTA = '#a26ba2'
+    MAGENTA_OUTLINE = '#8d5d8d'
+    GREEN = '#6ba970'
+    GREEN_OUTLINE = '#5e9362'
+
+    def __init__(self, graph: sg.Graph):
+        self.window = None
+        self.graph = graph
+
+        self.timeout = 0.1
+
+        self.bar_width = 0
+        self.startx = 0
+
+        self.array_of_rects = None
+        self.values = None
+        self.array_access = 0
+
+        self.algorithm = None
+
+    def set_window(self, window: sg.Window):
+        self.window = window
+
+    def execute(self):
+        self.algorithm.execute()
+        self._color_all_green()
+
+    def _draw_rects(self, slider_value: int):
+        x1 = self.startx
+        x2 = x1 + self.bar_width
+        k = 0
+        self.array_of_rects = []
+        self.values = []
+        for _ in range(slider_value):
+            number = random.randint(1, self.graph.Size[1])
+            self.values.append(number)
+            rectangle_id = self.graph.DrawRectangle(
+                (x1, number),
+                (x2, 0.0),
+                fill_color=Sorter.BLUE,
+                line_color=Sorter.BLUE_OUTLINE)
+            self.array_of_rects.append(Rectangle(rectangle_id, number))
+            x1 = x2 + 1
+            x2 = x1 + self.bar_width
+
+    def redraw(self):
+        self.array_access += 1
+        self.window.FindElement('text').Update(
+            f'Array access: {self.array_access}')
+        self.graph.Erase()
+
+        for i, elem in enumerate(self.array_of_rects):
+            x1 = self.startx + (i) * (self.bar_width + 1)
+            if elem.height == self.values[i]:
+                elem.rect_id = self.graph.DrawRectangle(
+                    (x1, elem.height),
+                    (x1 + self.bar_width, 0.0),
+                    fill_color=Sorter.BLUE,
+                    line_color=Sorter.BLUE_OUTLINE)
+            else:
+                self.values[i] = elem.height
+                elem.rect_id = self.graph.DrawRectangle(
+                    (x1, elem.height),
+                    (x1 + self.bar_width, 0.0),
+                    fill_color=Sorter.MAGENTA,
+                    line_color=Sorter.MAGENTA_OUTLINE)
+
+        self.window.Refresh()
+        time.sleep(1 / self.timeout)
+
+    def _color_all_green(self):
+        for elem in self.array_of_rects:
+            elem.highlight(self.graph, Sorter.BLUE, Sorter.BLUE_OUTLINE)
+            self.window.Refresh()
+
+        for elem in self.array_of_rects:
+            elem.highlight(self.graph, Sorter.GREEN, Sorter.GREEN_OUTLINE)
+            self.window.Refresh()
+            time.sleep(1 / self.timeout)
+
+    def swap_rects(self, rect1: Rectangle, rect2: Rectangle):
+        self.array_access += 1
+        self.window.FindElement('text').Update(
+            f'Array access: {self.array_access}')
+
+        rect1.highlight(self.graph, Sorter.MAGENTA, Sorter.MAGENTA_OUTLINE)
+        rect2.highlight(self.graph, Sorter.MAGENTA, Sorter.MAGENTA_OUTLINE)
+        self.window.Refresh()
+        time.sleep(1 / self.timeout)
+
+        rect1_upper_left_x = self.graph.GetBoundingBox(rect1.rect_id)[0][0]
+        rect2_upper_left_x = self.graph.GetBoundingBox(rect2.rect_id)[0][0]
+
+        delta1 = rect2_upper_left_x - rect1_upper_left_x
+        delta2 = rect1_upper_left_x - rect2_upper_left_x
+
+        self.graph.MoveFigure(rect1.rect_id, delta1, 0)
+        self.graph.MoveFigure(rect2.rect_id, delta2, 0)
+
+        self.window.Refresh()
+        time.sleep(1 / self.timeout)
+
+        rect1.highlight(self.graph, Sorter.BLUE, Sorter.BLUE_OUTLINE)
+        rect2.highlight(self.graph, Sorter.BLUE, Sorter.BLUE_OUTLINE)
+        self.window.Refresh()
