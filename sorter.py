@@ -2,6 +2,7 @@ import random
 import time
 import PySimpleGUI as sg
 
+
 class Rectangle:
 
     def __init__(self, rect_id: int, height: int):
@@ -27,10 +28,10 @@ class Sorter:
     GREEN_OUTLINE = '#5e9362'
 
     def __init__(self, graph: sg.Graph):
-        self.window = None
+        self._window = None
         self.graph = graph
 
-        self.timeout = 0.1
+        self.timeout = 0
 
         self.bar_width = 0
         self.startx = 0
@@ -39,30 +40,50 @@ class Sorter:
         self.values = None
         self.array_access = 0
 
-        self.algorithm = None
+        self._algorithm = None
 
-    def set_window(self, window: sg.Window):
-        self.window = window
+    @property
+    def window(self):
+        return self._window
+
+    @window.setter
+    def window(self, window: sg.Window):
+        self._window = window
+
+    @property
+    def algorithm(self):
+        return self._algorithm
+
+    @algorithm.setter
+    def algorithm(self, algh):
+        self._algorithm = algh
+
+        self._algorithm.array = self.array_of_rects
+        self._algorithm.swap_rects = self.swap_rects
+        self._algorithm.redraw = self.redraw
 
     def execute(self):
-        self.algorithm.execute()
+        self._algorithm.execute()
         self._color_all_green()
 
     def _draw_rects(self, slider_value: int):
         x1 = self.startx
         x2 = x1 + self.bar_width
-        k = 0
+
         self.array_of_rects = []
         self.values = []
+
         for _ in range(slider_value):
             number = random.randint(1, self.graph.Size[1])
             self.values.append(number)
+
             rectangle_id = self.graph.DrawRectangle(
                 (x1, number),
                 (x2, 0.0),
                 fill_color=Sorter.BLUE,
                 line_color=Sorter.BLUE_OUTLINE)
             self.array_of_rects.append(Rectangle(rectangle_id, number))
+            
             x1 = x2 + 1
             x2 = x1 + self.bar_width
 
@@ -119,7 +140,6 @@ class Sorter:
 
         self.graph.MoveFigure(rect1.rect_id, delta1, 0)
         self.graph.MoveFigure(rect2.rect_id, delta2, 0)
-
         self.window.Refresh()
         time.sleep(1 / self.timeout)
 

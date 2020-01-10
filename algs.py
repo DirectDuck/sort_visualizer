@@ -1,21 +1,15 @@
-from abc import ABC, abstractmethod
 from sorter import Sorter
+from abc import ABC, abstractmethod
+
 
 class Sort(ABC):
-
-    @abstractmethod
-    def __init__(self, sorter: Sorter):
-        pass
 
     @abstractmethod
     def execute(self):
         pass
 
-class BubbleSort(Sort):
 
-    def __init__(self, sorter: Sorter):
-        self.sorter = sorter
-        self.array = self.sorter.array_of_rects
+class BubbleSort(Sort):
 
     def execute(self):
         self._bubble()
@@ -24,17 +18,11 @@ class BubbleSort(Sort):
         for i in range(len(self.array) - 1):
             for j in range(len(self.array) - i - 1):
                 if self.array[j].height > self.array[j + 1].height:
-                    self.sorter.swap_rects(self.array[j], self.array[j + 1])
-                    self.array[j], self.array[j +
-                                              1] = self.array[j + 1], self.array[j]
-            self.sorter.window.Refresh()
+                    self.swap_rects(self.array[j], self.array[j + 1])
+                    self.array[j], self.array[j + 1] = self.array[j + 1], self.array[j]
 
 
 class QuickSort(Sort):
-
-    def __init__(self, sorter: Sorter):
-        self.sorter = sorter
-        self.array = self.sorter.array_of_rects
 
     def execute(self):
         self._quick_sort(0, len(self.array) - 1)
@@ -52,12 +40,12 @@ class QuickSort(Sort):
                 low = low + 1
 
             if low <= high:
-                self.sorter.swap_rects(self.array[low], self.array[high])
+                self.swap_rects(self.array[low], self.array[high])
                 self.array[low], self.array[high] = self.array[high], self.array[low]
             else:
                 break
 
-        self.sorter.swap_rects(self.array[start], self.array[high])
+        self.swap_rects(self.array[start], self.array[high])
         self.array[start], self.array[high] = self.array[high], self.array[start]
 
         return high
@@ -72,10 +60,6 @@ class QuickSort(Sort):
 
 
 class MergeSort(Sort):
-
-    def __init__(self, sorter: Sorter):
-        self.sorter = sorter
-        self.array = self.sorter.array_of_rects
 
     def execute(self):
         self._merge_sort(self.array, 0)
@@ -100,13 +84,13 @@ class MergeSort(Sort):
                     arr[k_or] = lefthalf[i]
                     i += 1
 
-                    self.sorter.redraw()
+                    self.redraw()
                 else:
                     self.array[k] = righthalf[j]
                     arr[k_or] = righthalf[j]
                     j += 1
 
-                    self.sorter.redraw()
+                    self.redraw()
                 k += 1
                 k_or += 1
 
@@ -117,7 +101,7 @@ class MergeSort(Sort):
                 k += 1
                 k_or += 1
 
-                self.sorter.redraw()
+                self.redraw()
 
             while j < len(righthalf):
                 self.array[k] = righthalf[j]
@@ -126,14 +110,10 @@ class MergeSort(Sort):
                 k += 1
                 k_or += 1
 
-                self.sorter.redraw()
+                self.redraw()
 
 
 class GnomeSort(Sort):
-
-    def __init__(self, sorter: Sorter):
-        self.sorter = sorter
-        self.array = self.sorter.array_of_rects
 
     def execute(self):
         self._gnome()
@@ -144,17 +124,13 @@ class GnomeSort(Sort):
             if self.array[i - 1].height <= self.array[i].height:
                 i += 1
             else:
-                self.sorter.swap_rects(self.array[i - 1], self.array[i])
+                self.swap_rects(self.array[i - 1], self.array[i])
                 self.array[i - 1], self.array[i] = self.array[i], self.array[i - 1]
                 if i > 1:
                     i -= 1
 
 
 class RadixSort(Sort):
-
-    def __init__(self, sorter: Sorter):
-        self.sorter = sorter
-        self.array = self.sorter.array_of_rects
 
     def execute(self):
         self._radix()
@@ -181,7 +157,7 @@ class RadixSort(Sort):
         i = 0
         for i in range(0, len(self.array)):
             self.array[i] = output[i]
-            self.sorter.redraw()
+            self.redraw()
 
     def _radix(self):
         max1 = max(self.array).height
