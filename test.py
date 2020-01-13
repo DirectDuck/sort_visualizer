@@ -38,5 +38,4 @@ gui.add_sort('Radix', algs.RadixSort)
 gui.add_sort('Gnome', algs.GnomeSort)
 gui.add_sort('Quick', algs.QuickSort)
 gui.add_sort('Test', TestBubbleSort)
-
 gui.run()

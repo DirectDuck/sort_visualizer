@@ -1,12 +1,10 @@
 from sorter import Sorter
-from abc import ABC, abstractmethod
 
 
-class Sort(ABC):
+class Sort():
 
-    @abstractmethod
     def execute(self):
-        pass
+        raise NotImplementedError(f'define execute method in {self.__class__.__name__} class')
 
 
 class BubbleSort(Sort):

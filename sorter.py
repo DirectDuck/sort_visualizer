@@ -86,6 +86,7 @@ class Sorter:
             
             x1 = x2 + 1
             x2 = x1 + self.bar_width
+        print(len(self.array_of_rects))
 
     def redraw(self):
         self.array_access += 1

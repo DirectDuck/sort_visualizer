@@ -5,12 +5,12 @@ import algs
 
 class GUI:
 
-    def __init__(self):
-        self.width = 850
-        self.height = 400
-        self.graph = sg.Graph((self.width, self.height),
+    def __init__(self, width=850, height=400):
+        self._width = width
+        self._height = height
+        self.graph = sg.Graph((self._width, self._height),
                               (0, 0),
-                              (self.width, self.height),
+                              (self._width, self._height),
                               background_color='#fff', float_values=True)
 
         self.sorter = Sorter(self.graph)
@@ -42,7 +42,7 @@ class GUI:
 
     def add_sort(self, name: str, algh: algs.Sort):
         self.layout[0].append(sg.Button(name))
-        self.algorithms[name] = algh
+        self.algorithms[name] = algh()
 
     def run(self):
         window = sg.Window('Sorting Visualizer', self.layout, finalize=True)
@@ -69,7 +69,7 @@ class GUI:
             if self.started:
                 for name, algh in self.algorithms.items():
                     if event == name:
-                        self.sorter.algorithm = algh()
+                        self.sorter.algorithm = algh
                         self.sorter.execute()
                         self.started = False
                         break
