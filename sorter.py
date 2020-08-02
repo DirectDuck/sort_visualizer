@@ -87,8 +87,8 @@ class Sorter:
 
     def execute(self):
         self._algorithm.execute()
-        self._reset_rect_color()
-        self._color_all_green()
+        self._reset_all_rects_color()
+        self._color_all_rects_green()
 
     def _draw_rects(self, slider_value: int):
         x1 = self.start_x
@@ -134,12 +134,12 @@ class Sorter:
         self.window.Refresh()
         time.sleep(1 / self.timeout)
 
-    def _reset_rect_color(self):
+    def _reset_all_rects_color(self):
         for elem in self.array_of_rects:
             elem.highlight(self.graph, Sorter.BLUE, Sorter.BLUE_OUTLINE)
             self.window.Refresh()
 
-    def _color_all_green(self):
+    def _color_all_rects_green(self):
         for elem in self.array_of_rects:
             elem.highlight(self.graph, Sorter.GREEN, Sorter.GREEN_OUTLINE)
             self.window.Refresh()
