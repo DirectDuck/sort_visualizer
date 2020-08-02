@@ -65,8 +65,29 @@ class Sorter:
         self._algorithm.swap_rects = self.swap_rects
         self._algorithm.redraw = self.redraw
 
+    def _increment_array_access(self):
+        self.array_access += 1
+        self.window.FindElement('text').Update(
+            f'Array access: {self.array_access}')
+
+    def _reset_array_access(self):
+        self.array_access = 0
+        self.window.FindElement('text').Update(
+            f'Array access: {self.array_access}')
+
+    def _calculate_and_set_timeout(self, value: int):
+        self.timeout = value * 3 - 25
+
+    def _calculate_and_set_bar_width(self, value: int):
+        self.bar_width = int(self.graph.Size[0] / (value * 2))
+
+    def _calculate_and_set_start_x(self, value: int):
+        free_space = self.graph.Size[0] - (self.bar_width + 1) * value
+        self.start_x = int(free_space / 2)
+
     def execute(self):
         self._algorithm.execute()
+        self._reset_rect_color()
         self._color_all_green()
 
     def _draw_rects(self, slider_value: int):
@@ -77,25 +98,23 @@ class Sorter:
         self.values = []
 
         for _ in range(slider_value):
-            number = random.randint(1, self.graph.Size[1])
-            self.values.append(number)
+            height = random.randint(1, self.graph.Size[1])
+            self.values.append(height)
 
             rectangle_id = self.graph.DrawRectangle(
-                (x1, number),
+                (x1, height),
                 (x2, 0.0),
                 fill_color=Sorter.BLUE,
                 line_color=Sorter.BLUE_OUTLINE)
-            self.array_of_rects.append(Rectangle(rectangle_id, number))
+            self.array_of_rects.append(Rectangle(rectangle_id, height))
             
             x1 = x2 + self.RECTANGLE_SPACING
             x2 = x1 + self.bar_width
 
     def redraw(self):
-        self.array_access += 1
-        self.window.FindElement('text').Update(
-            f'Array access: {self.array_access}')
-        self.graph.Erase()
+        self._increment_array_access()
 
+        self.graph.Erase()
         for i, elem in enumerate(self.array_of_rects):
             x1 = self.start_x + (i) * (self.bar_width + 1)
             if elem.height == self.values[i]:
@@ -115,20 +134,19 @@ class Sorter:
         self.window.Refresh()
         time.sleep(1 / self.timeout)
 
-    def _color_all_green(self):
+    def _reset_rect_color(self):
         for elem in self.array_of_rects:
             elem.highlight(self.graph, Sorter.BLUE, Sorter.BLUE_OUTLINE)
             self.window.Refresh()
 
+    def _color_all_green(self):
         for elem in self.array_of_rects:
             elem.highlight(self.graph, Sorter.GREEN, Sorter.GREEN_OUTLINE)
             self.window.Refresh()
             time.sleep(1 / self.timeout)
 
     def swap_rects(self, rect1: Rectangle, rect2: Rectangle):
-        self.array_access += 1
-        self.window.FindElement('text').Update(
-            f'Array access: {self.array_access}')
+        self._increment_array_access()
 
         rect1.highlight(self.graph, Sorter.MAGENTA, Sorter.MAGENTA_OUTLINE)
         rect2.highlight(self.graph, Sorter.MAGENTA, Sorter.MAGENTA_OUTLINE)

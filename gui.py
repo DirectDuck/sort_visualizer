@@ -32,11 +32,8 @@ class GUI:
     def _draw_screen(self):
         self.sorter.graph.Erase()
 
-        self.sorter.bar_width = int(
-            self.sorter.graph.Size[0] / (self.slider_value * 2))
-        free_space = self.sorter.graph.Size[0] - \
-            (self.sorter.bar_width + 1) * self.slider_value
-        self.sorter.start_x = int(free_space / 2)
+        self.sorter._calculate_and_set_bar_width(self.slider_value)
+        self.sorter._calculate_and_set_start_x(self.slider_value)
 
         self.sorter._draw_rects(self.slider_value)
 
@@ -57,13 +54,8 @@ class GUI:
             if event == 'Start' or self.slider_value != int(values['slider']):
                 self.started = True
                 self.slider_value = int(values['slider'])
-
-                self.sorter.array_access = 0
-                self.sorter.window.FindElement(
-                    'text').Update('Array access: 0')
-
-                self.sorter.timeout = int(values['slider']) * 3 - 25
-
+                self.sorter._reset_array_access()
+                self.sorter._calculate_and_set_timeout(self.slider_value)
                 self._draw_screen()
 
             if self.started:
