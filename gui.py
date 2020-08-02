@@ -36,7 +36,7 @@ class GUI:
             self.sorter.graph.Size[0] / (self.slider_value * 2))
         free_space = self.sorter.graph.Size[0] - \
             (self.sorter.bar_width + 1) * self.slider_value
-        self.sorter.startx = int(free_space / 2)
+        self.sorter.start_x = int(free_space / 2)
 
         self.sorter._draw_rects(self.slider_value)
 

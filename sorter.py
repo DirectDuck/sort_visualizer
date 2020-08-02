@@ -12,6 +12,7 @@ class Rectangle:
     def highlight(self, graph: sg.Graph, color1: str, color2: str=None):
         if color2 is None:
             color2 = color1
+        
         graph.TKCanvas.itemconfig(self.rect_id, fill=color1, outline=color2)
 
     def __gt__(self, other):
@@ -27,6 +28,8 @@ class Sorter:
     GREEN = '#6ba970'
     GREEN_OUTLINE = '#5e9362'
 
+    RECTANGLE_SPACING = 1
+
     def __init__(self, graph: sg.Graph):
         self._window = None
         self.graph = graph
@@ -34,7 +37,7 @@ class Sorter:
         self.timeout = 0
 
         self.bar_width = 0
-        self.startx = 0
+        self.start_x = 0
 
         self.array_of_rects = None
         self.values = None
@@ -67,7 +70,7 @@ class Sorter:
         self._color_all_green()
 
     def _draw_rects(self, slider_value: int):
-        x1 = self.startx
+        x1 = self.start_x
         x2 = x1 + self.bar_width
 
         self.array_of_rects = []
@@ -84,9 +87,8 @@ class Sorter:
                 line_color=Sorter.BLUE_OUTLINE)
             self.array_of_rects.append(Rectangle(rectangle_id, number))
             
-            x1 = x2 + 1
+            x1 = x2 + self.RECTANGLE_SPACING
             x2 = x1 + self.bar_width
-        print(len(self.array_of_rects))
 
     def redraw(self):
         self.array_access += 1
@@ -95,7 +97,7 @@ class Sorter:
         self.graph.Erase()
 
         for i, elem in enumerate(self.array_of_rects):
-            x1 = self.startx + (i) * (self.bar_width + 1)
+            x1 = self.start_x + (i) * (self.bar_width + 1)
             if elem.height == self.values[i]:
                 elem.rect_id = self.graph.DrawRectangle(
                     (x1, elem.height),
