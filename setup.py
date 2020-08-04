@@ -8,7 +8,7 @@ setup(
   author = 'dduck',
   author_email = 'famgui14@gmail.com',
   url = 'https://github.com/DirectDuck/sorting_visualizer',
-  download_url = 'https://github.com/DirectDuck/sorting_visualizer/archive/1.0.tar.gz',
+  download_url = 'https://github.com/DirectDuck/sorting_visualizer/archive/1.0.1.tar.gz',
   keywords = ['SORT', 'SORTING', 'VISUALIZATION', 'VISUALIZE'],
   install_requires=[
           'PySimpleGUI',
