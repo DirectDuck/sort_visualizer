@@ -1,5 +1,4 @@
-import gui
-import algs
+from sort_visualizer import gui, algs
 '''
 In order to visualize your own sort you 
 need to create a class that inherits from 
@@ -32,13 +31,13 @@ class TestBubbleSort(algs.Sort):
 
 
 if __name__ == '__main__':
-    gui = gui.GUI()
+    test_gui = gui.GUI()
 
-    gui.add_sort('Bubble', algs.BubbleSort)
-    gui.add_sort('Merge', algs.MergeSort)
-    gui.add_sort('Radix', algs.RadixSort)
-    gui.add_sort('Gnome', algs.GnomeSort)
-    gui.add_sort('Quick', algs.QuickSort)
-    gui.add_sort('Test', TestBubbleSort)
+    test_gui.add_sort('Bubble', algs.BubbleSort)
+    test_gui.add_sort('Merge', algs.MergeSort)
+    test_gui.add_sort('Radix', algs.RadixSort)
+    test_gui.add_sort('Gnome', algs.GnomeSort)
+    test_gui.add_sort('Quick', algs.QuickSort)
+    test_gui.add_sort('Test', TestBubbleSort)
 
-    gui.run()
+    test_gui.run()

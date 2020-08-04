@@ -1,4 +1,4 @@
-from sorter import Sorter
+from sort_visualizer.sorter import Sorter
 
 
 class Sort():
