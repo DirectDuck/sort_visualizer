@@ -1,4 +1,4 @@
-# Sorting_visualizer
+# Sort_visualizer
 
 Sorting_visualizer is a tool that will allow you to easily visualize any sorting algorithms
 
