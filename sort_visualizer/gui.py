@@ -1,6 +1,6 @@
 import PySimpleGUI as sg
-from sort_visualizer.sorter import Sorter
-from sort_visualizer import algs
+from .sorter import Sorter
+from . import algs
 
 
 class GUI:

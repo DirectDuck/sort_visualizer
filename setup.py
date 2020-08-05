@@ -2,13 +2,13 @@ from distutils.core import setup
 setup(
   name = 'sort_visualizer',
   packages = ['sort_visualizer'],
-  version = '1.0.2',
+  version = '1.0.3',
   license='MIT',
   description = 'Python package to visualize any sorting algorithm',
   author = 'dduck',
   author_email = 'famgui14@gmail.com',
   url = 'https://github.com/DirectDuck/sorting_visualizer',
-  download_url = 'https://github.com/DirectDuck/sorting_visualizer/archive/1.0.2.tar.gz',
+  download_url = 'https://github.com/DirectDuck/sorting_visualizer/archive/1.0.3.tar.gz',
   keywords = ['SORT', 'SORTING', 'VISUALIZATION', 'VISUALIZE'],
   install_requires=[
           'PySimpleGUI',
