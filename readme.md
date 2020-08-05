@@ -1,6 +1,6 @@
 # Sort_visualizer
 
-Sorting_visualizer is a tool that will allow you to easily visualize any sorting algorithms
+Sort_visualizer is a tool that will allow you to easily visualize any sorting algorithms
 
 ## Usage
 
@@ -18,4 +18,4 @@ Visual functions:
 
 In `test.py` you can find example of creating your own algorithm and actually run `python test.py` to see how it works.
 
-To see more examples check `algs.py`
+To see more examples check `sort_visualizer/algs.py`
