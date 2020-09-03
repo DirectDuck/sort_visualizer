@@ -8,7 +8,7 @@ README = (HERE / "README.md").read_text()
 setup(
   name = 'sort_visualizer',
   packages = ['sort_visualizer'],
-  version = '1.0.4',
+  version = '1.0.5',
   license='MIT',
   description = 'Python package to visualize any sorting algorithm',
   long_description=README,
@@ -16,7 +16,7 @@ setup(
   author = 'dduck',
   author_email = 'famgui14@gmail.com',
   url = 'https://github.com/DirectDuck/sorting_visualizer',
-  download_url = 'https://github.com/DirectDuck/sorting_visualizer/archive/1.0.4.tar.gz',
+  download_url = 'https://github.com/DirectDuck/sorting_visualizer/archive/1.0.5.tar.gz',
   keywords = ['SORT', 'SORTING', 'VISUALIZATION', 'VISUALIZE'],
   include_package_data=True,
   install_requires=[
