@@ -1,5 +1,6 @@
 
 # Sort_visualizer
+[![Downloads](https://pepy.tech/badge/sort-visualizer)](https://pepy.tech/project/sort-visualizer)
 
 Sort_visualizer is a tool that will allow you to easily visualize any sorting algorithms
 
