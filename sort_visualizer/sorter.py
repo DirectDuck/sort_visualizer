@@ -12,7 +12,7 @@ class Rectangle:
     def highlight(self, graph: sg.Graph, color1: str, color2: str=None):
         if color2 is None:
             color2 = color1
-        
+
         graph.TKCanvas.itemconfig(self.rect_id, fill=color1, outline=color2)
 
     def __gt__(self, other):

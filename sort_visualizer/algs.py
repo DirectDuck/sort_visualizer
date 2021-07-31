@@ -1,6 +1,3 @@
-from .sorter import Sorter
-
-
 class Sort():
 
     def execute(self):
@@ -158,7 +155,6 @@ class RadixSort(Sort):
             self.redraw()
 
     def _radix(self):
-        max1 = max(self.array).height
         exp = 1
         while self.array != sorted(self.array):
             self._counting_sort(exp)

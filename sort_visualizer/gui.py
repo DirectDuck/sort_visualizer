@@ -23,11 +23,11 @@ class GUI:
             sg.Slider(range=(10, 200), orientation='horizontal', key='slider',
                        change_submits=True, disable_number_display=True),
             sg.Text('Iteration speed:', key='label_iter_spd'),
-            sg.Slider(range=(0.1, 2), orientation='horizontal', 
-                       key='iteration_speed', change_submits=True, 
+            sg.Slider(range=(0.1, 2), orientation='horizontal',
+                       key='iteration_speed', change_submits=True,
                        disable_number_display=True, default_value=1,
                        resolution=0.01)],
-            
+
             [sg.Text('Array access: 0    ', key='text')],
 
             [self.graph],
