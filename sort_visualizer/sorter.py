@@ -75,8 +75,8 @@ class Sorter:
         self.window.FindElement('text').Update(
             f'Array access: {self.array_access}')
 
-    def _calculate_and_set_timeout(self, value: int):
-        self.timeout = value * 3 - 25
+    def _calculate_and_set_timeout(self, value: int, speed_modifier: float):
+        self.timeout = (value * 3 - 25) * speed_modifier
 
     def _calculate_and_set_bar_width(self, value: int):
         self.bar_width = int(self.graph.Size[0] / (value * 2))
